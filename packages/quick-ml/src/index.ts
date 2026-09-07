@@ -262,6 +262,9 @@ export class QuickML implements Component {
 	): Promise<ICatalystQuickMLResponse> {
 		await wrapValidatorsWithPromise(() => {
 			isNonEmptyString(endPointKey, 'endpoint key', true);
+			if (imageFile == null) {
+				throw new Error('image file must not be null or undefined');
+			}
 			isValidType(imageFile, 'object', 'image file', true);
 			isNonEmptyString(prompt, 'prompt', true);
 		}, CatalystQuickMLError);

@@ -17,6 +17,7 @@ describe('addDefaultAppHeaders', () => {
 
 	afterEach(() => {
 		delete process.env.ZC_ORG_ID;
+		delete process.env.X_ZOHO_CATALYST_ORG_ID;
 	});
 
 	it('should set PROJECT_ID, X-Catalyst-Environment and Environment headers from config', () => {
@@ -39,6 +40,21 @@ describe('addDefaultAppHeaders', () => {
 		const result = addDefaultAppHeaders({}, baseConfig as any);
 
 		expect(result['CATALYST-ORG']).toBeUndefined();
+	});
+
+	it('should add CATALYST-ORG header when legacy X_ZOHO_CATALYST_ORG_ID env var is set', () => {
+		process.env.X_ZOHO_CATALYST_ORG_ID = 'org-legacy';
+		const result = addDefaultAppHeaders({}, baseConfig as any);
+
+		expect(result['CATALYST-ORG']).toBe('org-legacy');
+	});
+
+	it('should prefer ZC_ORG_ID over X_ZOHO_CATALYST_ORG_ID when both are set', () => {
+		process.env.ZC_ORG_ID = 'org-new';
+		process.env.X_ZOHO_CATALYST_ORG_ID = 'org-legacy';
+		const result = addDefaultAppHeaders({}, baseConfig as any);
+
+		expect(result['CATALYST-ORG']).toBe('org-new');
 	});
 
 	it('should add x-zc-project-secret-key when projectSecretKey is present', () => {

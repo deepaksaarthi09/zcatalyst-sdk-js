@@ -160,5 +160,8 @@ describe('testing quick ml', () => {
 		await expect(
 			quickml.analyzeImage('1234abcd', undefined as any, 'Describe this image')
 		).rejects.toThrowError();
+		await expect(
+			quickml.analyzeImage('1234abcd', null as any, 'Describe this image')
+		).rejects.toThrowError();
 	});
 });

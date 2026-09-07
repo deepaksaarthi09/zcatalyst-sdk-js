@@ -405,8 +405,9 @@ export function addDefaultAppHeaders(headers: Record<string, string>, values?: I
 	headers[ENVIRONMENT_KEY_NAME] = values?.environment as string;
 	headers[ENVIRONMENT] = values?.environment as string; // handle indide the quick ml
 
-	if (isNonEmptyString(process.env.ZC_ORG_ID)) {
-		headers[ZC_ORG_ID] = process.env.ZC_ORG_ID as string;
+	const orgId = process.env.ZC_ORG_ID || process.env.X_ZOHO_CATALYST_ORG_ID;
+	if (isNonEmptyString(orgId)) {
+		headers[ZC_ORG_ID] = orgId as string;
 	}
 
 	if (isNonEmptyString(values?.projectSecretKey)) {
